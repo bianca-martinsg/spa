@@ -13,8 +13,8 @@ class StoreProductRequest extends FormRequest
      */
 
 
-     # Método para verificar se o usuário está autorizado a fazer essa requisição
-     # Neste caso, todos os usuários estão autorizados
+    # Método para verificar se o usuário está autorizado a fazer essa requisição
+    # Neste caso, todos os usuários estão autorizados
     public function authorize()
     {
         return true;
@@ -30,6 +30,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
+            'category' => 'required|string|max:255',
         ];
     }
 }
