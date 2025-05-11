@@ -46,7 +46,7 @@ yarn-error.log
 
 # Laravel Mix
 /public/hot
-webpack.mix.js
+#webpack.mix.js
 
 # IDEs e arquivos de sistema
 .idea/
