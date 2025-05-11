@@ -7,8 +7,7 @@ import ProductForm from './components/ProductForm.vue'; // Componente para cadas
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/produtos', component: ProductList },
-  { path: '/produtos/novo', component: ProductForm },
+  { path: '/', component: ProductForm },
 ];
 
 const router = new VueRouter({

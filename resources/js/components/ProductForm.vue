@@ -7,7 +7,7 @@
             </div>
 
             <button class="nav-button">
-                <i class="bi bi-card-list"></i>
+                <i class="bi bi-card-list" aria-label="Lista de navegação"></i>
             </button>
 
             <div class="sidebar-spacer"></div>
@@ -16,11 +16,14 @@
                 <div class="user-avatar mb-4">
                     <img :src="avatar" alt="Avatar" class="img-fluid" />
                 </div>
-                <button class="logout-button">
+                <button class="logout-button" aria-label="Sair">
                     <i class="bi bi-box-arrow-right"></i>
                 </button>
             </div>
         </aside>
+
+        <div v-if="showDrawer" class="backdrop"></div>
+
 
         <!-- Conteúdo principal -->
         <div class="main-content container">
@@ -31,53 +34,96 @@
                 <!-- Input de Pesquisa com ícone dentro -->
                 <div class="d-flex">
                     <div class="input-group" style="max-height: 48px;">
-                        <span class="input-group-text"
-                            style="border-right: none; padding: 10px 16px; border-radius: 8px 0 0 8px; font-size: 16px; height: 48px; display: flex; align-items: center;">
+                        <span class="input-group-text" aria-label="Buscar">
                             <i class="bi bi-search"></i>
                         </span>
                         <input type="text" class="form-control search-input" placeholder="Pesquisar..."
-                            style="border-left: none; padding: 10px 16px; border-radius: 0 8px 8px 0; font-size: 16px; height: 48px;" />
+                            aria-label="Pesquisar produtos" />
                     </div>
 
-                    <button class="btn btn-light filter-button ms-2"
-                        style="padding: 14px; margin-left: 16px; max-height: 48px;">
-                        <i class="bi bi-funnel"></i> <!-- Ícone de filtro -->
+                    <button class="btn btn-light filter-button ms-2" aria-label="Filtrar">
+                        <i class="bi bi-funnel"></i>
                     </button>
-
                 </div>
 
                 <!-- Botão Novo Produto alinhado à direita -->
-                <button class="btn" @click="showDrawer = true"
-                    style="background-color: #DA1E28; color: white; font-size: 16px; line-height: 24px; display: flex; align-items: center; padding: 10px 16px;">
+                <button class="btn" @click="showDrawer = true" style="background-color: #DA1E28; color: white;">
                     <i class="bi bi-plus" style="margin-right: 8px;"></i> Novo Produto
                 </button>
             </div>
 
-            <ul class="list-group">
-                <li class="list-group-item" v-for="product in products" :key="product.id">
-                    {{ product.name }} - R$ {{ product.price }}
-                </li>
-            </ul>
+            <table class="table table-borderless align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            ID <i class="bi bi-arrow-down-up ms-1"></i>
+                        </th>
+                        <th scope="col">
+                            Nome <i class="bi bi-arrow-down-up ms-1"></i>
+                        </th>
+                        <th scope="col">
+                            Categoria <i class="bi bi-arrow-down-up ms-1"></i>
+                        </th>
+                        <th scope="col">
+                            Preço <i class="bi bi-arrow-down-up ms-1"></i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(product, index) in products" :key="product.id">
+                        <td>#{{ index + 1 }}</td>
+                        <td class="text-truncate" style="max-width: 200px;">{{ product.name }}</td>
+                        <td>
+                            <span class="badge" :class="badgeClass(product.category || 'Outros')">
+                                {{ product.category || 'Outros' }}
+                            </span>
+                        </td>
+
+                        <td>R$ {{ parseFloat(product.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
 
             <!-- Drawer Modal -->
             <transition name="slide">
                 <div class="drawer" v-if="showDrawer">
-                    <div class="drawer-header d-flex justify-content-between align-items-center p-3 border-bottom">
-                        <h5 class="mb-0">Novo Produto</h5>
-                        <button class="btn-close" @click="showDrawer = false"></button>
+                    <div class="drawer-header d-flex flex-column align-items-start">
+                        <img :src="logo" alt="Logo" style="width: 40px; margin-bottom: 32px;" />
+                        <h5 class="drawer-title mb-0">Cadastrar Produto</h5>
                     </div>
-                    <div class="drawer-body p-3">
+
+                    <div class="drawer-body">
                         <form @submit.prevent="save">
                             <div class="mb-3">
-                                <label for="name" class="form-label">Nome do Produto</label>
-                                <input v-model="name" class="form-control" id="name" required />
+                                <label for="name" class="custom-label">Nome</label>
+                                <input v-model="name" class="form-control custom-input" id="name" required />
                             </div>
+
                             <div class="mb-3">
-                                <label for="price" class="form-label">Preço</label>
-                                <input v-model="price" type="number" class="form-control" id="price" required />
+                                <label for="price" class="custom-label">Preço</label>
+                                <input v-model="price" type="number" class="form-control custom-input" id="price"
+                                    min="0" step="0.01" required />
                             </div>
-                            <button type="submit" class="btn btn-success">Salvar</button>
+
+                            <div class="mb-3">
+                                <label for="category" class="custom-label">Categoria</label>
+                                <select v-model="category" id="category" class="form-select custom-input" required>
+                                    <option disabled value="">--</option>
+                                    <option>Informática</option>
+                                    <option>TV/Áudio</option>
+                                    <option>Eletrodomésticos</option>
+                                    <option>Peças e Acessórios</option>
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end gap-3">
+                                <button type="button" class="btn cancel-btn"
+                                    @click="showDrawer = false">Cancelar</button>
+                                <button type="submit" class="btn btn-danger">Inserir Produto</button>
+                            </div>
                         </form>
+
                     </div>
                 </div>
             </transition>
@@ -86,7 +132,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
 import logo from '@assets/logo.png';
 import avatar from '@assets/avatar.png';
 
@@ -95,36 +141,63 @@ export default {
         return {
             products: [],
             showDrawer: false,
-            name: '',
-            price: '',
+            name: 'Nome do Produto',
+            price: 'R$ 0,00',
+            category: '',
             logo: logo,
             avatar: avatar
-        }
+        };
     },
     mounted() {
-        this.fetchProducts()
+        this.fetchProducts();
     },
     methods: {
         fetchProducts() {
             axios.get('/api/products')
                 .then(res => this.products = res.data)
-                .catch(err => console.error('Erro ao obter produtos:', err))
+                .catch(err => {
+                    console.error('Erro ao obter produtos:', err);
+                    alert('Falha ao carregar produtos');
+                });
         },
         save() {
             axios.post('/api/products', {
                 name: this.name,
-                price: this.price
-            }).then(() => {
-                this.fetchProducts()
-                this.showDrawer = false
-                this.name = ''
-                this.price = ''
-            }).catch(error => {
-                console.log('Erro ao salvar o produto', error)
+                price: this.price,
+                category: this.category
             })
+                .then(() => {
+                    this.fetchProducts();
+                    this.showDrawer = false;
+                    this.name = '';
+                    this.price = '';
+                    this.category = '';
+                })
+                .catch(error => {
+                    console.log('Erro ao salvar o produto', error);
+                    alert('Falha ao salvar o produto');
+                });
+        },
+        badgeClass(category) {
+            console.log(category);
+            switch (category) {
+                case 'Informática':
+                    return 'bg-warning text-dark';
+                case 'TV/Áudio':
+                    return 'bg-info text-white';
+                case 'Eletrodomésticos':
+                    return 'bg-primary text-white';
+                case 'Peças e Acessórios':
+                    return 'bg-danger text-white';
+                case 'Outros':
+                default:
+                    console.log('Outros');
+                    return 'bg-secondary text-white';
+            }
         }
+
     }
-}
+};
 </script>
 
 <style scoped>
@@ -162,12 +235,6 @@ export default {
     padding: 8px 0;
 }
 
-.nav-button i {
-    color: #50565B;
-    font-size: 20px;
-    background: transparent;
-}
-
 .sidebar-spacer {
     flex-grow: 1;
 }
@@ -201,12 +268,16 @@ export default {
 
 .input-group .input-group-text {
     background-color: transparent;
-    border: 1px solid #ced4da;
+    /* border: 1px solid #ced4da; */
+}
+
+.input-group span {
+    border-right: none !important;
 }
 
 .filter-button {
-    background-color: #f0f0f0;
-    border: none;
+    background-color: white;
+    border: 1px solid #ced4da;
     padding: 8px;
     color: #50565B;
     font-size: 18px;
@@ -220,13 +291,15 @@ export default {
 .drawer {
     position: fixed;
     top: 0;
-    left: 76px;
+    left: 0;
     width: 50%;
     height: 100%;
-    background-color: white;
+    background-color: #F0ECE4;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1050;
+    z-index: 2000;
+    padding: 48px 32px;
     overflow-y: auto;
+    max-width: 440px;
 }
 
 .slide-enter-active,
@@ -237,5 +310,47 @@ export default {
 .slide-enter,
 .slide-leave-to {
     transform: translateX(-100%);
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.custom-label {
+    font-weight: 500;
+    /* Medium */
+    font-size: 14px;
+    line-height: 18px;
+    color: #13171A;
+}
+
+.custom-input {
+    font-size: 12px !important;
+}
+
+.cancel-btn {
+    border: 1px solid #50565B;
+    background-color: transparent;
+    color: #50565B;
+}
+
+.drawer-title {
+    font-size: 36px;
+    line-height: 44px;
+    font-weight: 600;
+    /* semibold */
+    color: #13171A;
+}
+
+/* Camada de fundo embaçada */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
 }
 </style>
