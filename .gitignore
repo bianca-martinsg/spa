@@ -1,0 +1,60 @@
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+# Laravel
+/vendor/
+.env
+.env.testing
+.phpunit.result.cache
+/storage/*.key
+
+# Diretórios internos do Laravel
+/storage/app/public/*
+!/storage/app/public/.gitignore
+
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*.log
+
+/public/storage
+/public/hot
+/public/mix-manifest.json
+/public/js/*
+/public/css/*
+/public/build/
+
+# Node e npm/yarn
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# Compilados do front
+/public/js/
+/public/css/
+/public/build/
+/mix-manifest.json
+
+# Laravel Mix
+/public/hot
+webpack.mix.js
+
+# IDEs e arquivos de sistema
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Outros arquivos
+composer.lock
