@@ -17,4 +17,16 @@ class ProductRepository
     {
         return Product::create($data); // Cria o produto e retorna
     }
+
+    // Update a product
+    public function update(int $id, array $data)
+    {
+        return Product::find($id)->update($data);
+    }
+
+    // Delete a product
+    public function delete(int $id)
+    {
+        return Product::find($id)->delete();
+    }
 }

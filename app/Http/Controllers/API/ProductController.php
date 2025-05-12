@@ -33,6 +33,22 @@ class ProductController extends Controller
         // Validate the data with the StoreProductRequest (done automatically)
         $product = $this->repo->create($request->validated());
 
-        return response()->json($product, 201); // Código 201 indica criação bem-sucedida
+        return response()->json($product, 201);
+    }
+
+    // Update a product
+    public function update(Request $request, $id)
+    {
+        $product = $this->repo->update($id, $request->validated());
+
+        return response()->json($product, 200);
+    }
+
+    // Delete a product
+    public function destroy($id)
+    {
+        $this->repo->delete($id);
+
+        return response()->json(null, 204);
     }
 }
