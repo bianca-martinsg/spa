@@ -51,7 +51,6 @@ export default {
     watch: {
         showDrawer(newVal) {
             if (newVal) {
-                // Limpa os campos toda vez que o drawer é aberto
                 this.name = '';
                 this.price = '';
                 this.category = '';
@@ -67,11 +66,6 @@ export default {
     },
     methods: {
         save() {
-            console.log('Produto:', {
-                name: this.name,
-                price: this.price,
-                category: this.category
-            });
             this.$emit('save-product', {
                 name: this.name,
                 price: this.price,
@@ -134,5 +128,29 @@ export default {
     border: 1px solid #50565b;
     background-color: transparent;
     color: #50565b;
+}
+
+@media (max-width: 768px) {
+    .drawer {
+        width: 100%;
+        max-width: none;
+        padding: 32px 20px;
+    }
+
+    .drawer-title {
+        font-size: 22px;
+        line-height: 32px;
+        text-align: center;
+    }
+
+    .drawer-header {
+        align-items: center;
+    }
+
+    .d-flex.justify-content-end {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
 }
 </style>
