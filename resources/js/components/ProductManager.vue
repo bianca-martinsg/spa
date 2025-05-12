@@ -26,6 +26,8 @@
             <FilterModal :show="showFilterModal" :filters="filters" @close="showFilterModal = false"
                 @apply="filters = $event" />
 
+            <Toast :message="toastMessage" :type="toastType" />
+
         </div>
     </div>
 </template>
@@ -38,6 +40,7 @@ import DrawerModal from './DrawerModal.vue';
 import ProductTable from './ProductTable.vue';
 import FilterModal from './FilterModal.vue';
 import FilterButton from './FilterButton.vue';
+import Toast from './Toast.vue';
 import DeleteConfirmationModal from './DeleteConfirmationModal.vue';
 import axios from 'axios';
 import logo from '@assets/logo.png';
@@ -52,6 +55,7 @@ export default {
         ProductTable,
         FilterModal,
         FilterButton,
+        Toast,
         DeleteConfirmationModal
     },
     data() {
@@ -67,6 +71,8 @@ export default {
                 minPrice: null,
                 maxPrice: null
             },
+            toastMessage: '',
+            toastType: 'success',
             showDeleteConfirmation: false,
             productToDelete: null
         };
@@ -113,10 +119,13 @@ export default {
                 .then(() => {
                     this.fetchProducts();
                     this.showDrawer = false;
+                    this.toastMessage = 'Produto salvo com sucesso!';
+                    this.toastType = 'success';
                 })
                 .catch((error) => {
-                    console.log('Error saving product', error);
-                    alert('Falha ao salvar o produto');
+                    console.error('Error saving product', error);
+                    this.toastMessage = 'Falha ao salvar o produto';
+                    this.toastType = 'error';
                 });
         },
 
@@ -129,12 +138,15 @@ export default {
                 .delete(`/api/products/${id}`)
                 .then(() => {
                     this.fetchProducts();
+                    this.toastMessage = 'Produto deletado com sucesso!';
+                    this.toastType = 'success';
                 })
                 .catch((error) => {
                     console.log('Error deleting product', error);
-                    alert('Falha ao deletar o produto');
+                    this.toastMessage = 'Falha ao deletar o produto';
+                    this.toastType = 'error';
                 });
-        }
+        },
     }
 };
 </script>
