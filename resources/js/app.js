@@ -1,12 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import App from './App.vue'; // Certifique-se de que o caminho para o App.vue esteja correto
-import ProductForm from './components/ProductForm.vue'; // Componente para cadastro de produtos
-
+import App from './App.vue';
+import ProductManager from './components/ProductManager.vue';
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: ProductForm },
+  { path: '/', component: ProductManager },
 ];
 
 const router = new VueRouter({
