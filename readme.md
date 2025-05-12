@@ -97,3 +97,9 @@ To watch for changes and auto-compile:
 ```bash
 npm run watch
 ```
+
+### Auxiliary Feature — Clear the database
+To clear the data from the products table without deleting the table structure, you can run the following command:
+```bash
+php artisan clear:database
+```
