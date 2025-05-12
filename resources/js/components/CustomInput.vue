@@ -1,8 +1,8 @@
 <template>
     <div class="mb-3">
         <label :for="id" class="custom-label">{{ label }}</label>
-        <input :value="value" @input="onInput" :type="type" class="form-control custom-input" :id="id" :min="min"
-            :step="step" :required="required" :placeholder="placeholder" />
+        <input :value="displayValue" @input="onInput" type="text" class="form-control custom-input" :id="id"
+            :required="required" :placeholder="placeholder" />
     </div>
 </template>
 
@@ -13,28 +13,40 @@ export default {
         label: String,
         value: [String, Number],
         placeholder: String,
-        type: {
-            type: String,
-            default: 'text'
-        },
-        min: {
-            type: Number,
-            default: 0
-        },
-        step: {
-            type: Number,
-            default: 0.01
-        },
         required: {
             type: Boolean,
             default: true
+        },
+        money: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        displayValue() {
+            if (!this.money) return this.value;
+            // If the value is null, undefined or empty, return an empty string
+            if (this.value === null || this.value === undefined || this.value === '') return '';
+            const number = typeof this.value === 'number'
+                ? this.value
+                : Number(this.value.toString().replace(/\D/g, '')) / 100;
+
+            // Return the value formatted as a currency
+            return number.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
         }
     },
     methods: {
         onInput(event) {
-            const rawValue = event.target.value;
-            const value = this.type === 'number' ? Number(rawValue) : rawValue;
-            this.$emit('input', value)
+            if (!this.money) {
+                return this.$emit('input', event.target.value);
+            }
+
+            const raw = event.target.value.replace(/\D/g, '');
+            const numericValue = Number(raw) / 100;
+            this.$emit('input', numericValue);
         }
     }
 };

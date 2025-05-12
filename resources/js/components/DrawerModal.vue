@@ -15,7 +15,7 @@
 
                     <div class="mb-3">
                         <CustomInput v-model="price" :label="'Preço'" :id="'price'" type="number" :min="0" :step="0.01"
-                            :required="true" placeholder="R$ 0,00" />
+                            :required="true" placeholder="R$ 0,00" :money="true" />
                     </div>
 
                     <CustomSelect v-model="category" :label="'Categoria'" :id="'category'"

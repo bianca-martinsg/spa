@@ -15,11 +15,11 @@
                     <div class="row mt-3">
                         <div class="col">
                             <CustomInput v-model="localFilters.minPrice" :label="'Preço Mínimo'" :id="'minPrice'"
-                                type="number" :min="0" placeholder="R$ 0,00" />
+                                type="number" :min="0" placeholder="R$ 0,00" :money="true" />
                         </div>
                         <div class="col">
                             <CustomInput v-model="localFilters.maxPrice" :label="'Preço Máximo'" :id="'maxPrice'"
-                                type="number" :min="0" placeholder="R$ 0,00" />
+                                type="number" :min="0" placeholder="R$ 0,00" :money="true" />
                         </div>
                     </div>
                 </div>
