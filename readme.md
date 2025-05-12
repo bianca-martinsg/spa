@@ -88,12 +88,12 @@ php artisan serve
 ```
 Visit the app at: http://localhost:8000
 
-### 12. Compile os assets do front-end
+### 12. Install and compile front-end assets
 ```bash
-npm install
+npm install --force
 npm run dev
 ```
-Para compilar automaticamente ao alterar arquivos:
+To watch for changes and auto-compile:
 ```bash
 npm run watch
 ```
