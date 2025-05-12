@@ -24,7 +24,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .custom-label {
     font-family: 'Poppins', sans-serif;
