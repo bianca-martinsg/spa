@@ -7,10 +7,12 @@ use App\Http\Requests\StoreProductRequest;
 use App\Repositories\ProductRepository;
 
 namespace App\Http\Controllers\API;
+use App\Http\Requests\UpdateProductRequest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Repositories\ProductRepository;
+
 
 class ProductController extends Controller
 {
@@ -37,7 +39,8 @@ class ProductController extends Controller
     }
 
     // Update a product
-    public function update(Request $request, $id)
+
+    public function update(UpdateProductRequest $request, $id)
     {
         $product = $this->repo->update($id, $request->validated());
 
