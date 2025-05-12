@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Repositories\ProductRepository;
 
-
 class ProductController extends Controller
 {
     protected $repo;
@@ -39,7 +38,6 @@ class ProductController extends Controller
     }
 
     // Update a product
-
     public function update(UpdateProductRequest $request, $id)
     {
         $product = $this->repo->update($id, $request->validated());
