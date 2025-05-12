@@ -11,14 +11,15 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos gerais */
 nav {
   margin-bottom: 20px;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline;
   margin-right: 10px;
