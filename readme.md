@@ -112,5 +112,5 @@ php artisan clear:database
 ### View Edit and Delete Functions
 To view the edit and delete functionalities, access the branch:
 ```bash
-git checkout feature/add-edit-delete-actions
+git switch feature/add-edit-delete-actions
 ```
