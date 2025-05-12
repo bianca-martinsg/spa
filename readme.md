@@ -1,10 +1,10 @@
-# 📦 SPA de Cadastro e Listagem de Produtos (Laravel 6.2)
+# 📦 Product Registration and Listing SPA (Laravel 6.2)
 
 This project is a **single-page application** built with Laravel 6.2 for the main flow of **product registration and listing**, featuring:
 
 - Product registration with **name**, **category**, and **price**;
 - Dynamic listing display;
-- Responsive user interface.
+- Responsive user interface.s
 
 ---
 
