@@ -14,7 +14,7 @@ class AddCategoryToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('category')->nullable();  // Adiciona a coluna 'category'
+            $table->string('category')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddCategoryToProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('category');  // Remove a coluna 'category'
+            $table->dropColumn('category');
         });
     }
 }
