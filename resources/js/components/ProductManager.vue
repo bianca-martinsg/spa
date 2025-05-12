@@ -18,7 +18,7 @@
                     :style="{ backgroundColor: '#DA1E28', color: 'white' }" @click="showDrawer = true" />
             </div>
 
-            <ProductTable :filteredProducts="filteredProducts" @edit="editProduct" @delete="deleteProduct" />
+            <ProductTable :filteredProducts="filteredProducts" @delete="deleteProduct" />
 
             <DrawerModal :showDrawer="showDrawer" :logo="logo" @update:showDrawer="showDrawer = $event"
                 @save-product="save" />
@@ -38,6 +38,7 @@ import DrawerModal from './DrawerModal.vue';
 import ProductTable from './ProductTable.vue';
 import FilterModal from './FilterModal.vue';
 import FilterButton from './FilterButton.vue';
+import DeleteConfirmationModal from './DeleteConfirmationModal.vue';
 import axios from 'axios';
 import logo from '@assets/logo.png';
 import avatar from '@assets/avatar.png';
@@ -50,7 +51,8 @@ export default {
         DrawerModal,
         ProductTable,
         FilterModal,
-        FilterButton
+        FilterButton,
+        DeleteConfirmationModal
     },
     data() {
         return {
@@ -64,7 +66,9 @@ export default {
                 category: null,
                 minPrice: null,
                 maxPrice: null
-            }
+            },
+            showDeleteConfirmation: false,
+            productToDelete: null
         };
     },
     computed: {
@@ -113,6 +117,22 @@ export default {
                 .catch((error) => {
                     console.log('Error saving product', error);
                     alert('Falha ao salvar o produto');
+                });
+        },
+
+        editProduct(id) {
+            console.log('Editando produto com ID:', id);
+        },
+
+        deleteProduct(id) {
+            axios
+                .delete(`/api/products/${id}`)
+                .then(() => {
+                    this.fetchProducts();
+                })
+                .catch((error) => {
+                    console.log('Error deleting product', error);
+                    alert('Falha ao deletar o produto');
                 });
         }
     }
