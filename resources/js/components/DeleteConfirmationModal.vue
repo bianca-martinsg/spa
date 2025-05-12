@@ -4,15 +4,20 @@
             <h5 class="modal-title">Confirmar Exclusão</h5>
             <p>Tem certeza de que deseja excluir este produto?</p>
             <div class="modal-actions">
-                <button @click="confirmDelete" class="btn btn-danger">Sim, excluir</button>
-                <button @click="cancelDelete" class="btn btn-secondary">Cancelar</button>
+                <CustomButton text="Cancelar" customClass="cancel-btn" type="button" @click="cancelDelete" />
+                <CustomButton text="Sim, excluir" customClass="btn-danger" @click="confirmDelete" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import CustomButton from './CustomButton.vue';
+
 export default {
+    components: {
+        CustomButton
+    },
     data() {
         return {
             showModal: false,
@@ -51,14 +56,18 @@ export default {
 }
 
 .modal-content {
-    background-color: white;
+    background-color: #f0ece4;
     padding: 20px;
     border-radius: 8px;
     width: 300px;
     text-align: center;
+    font-family: 'Inter', sans-serif;
 }
 
-.modal-actions button {
-    margin: 10px;
+.modal-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
 }
 </style>
