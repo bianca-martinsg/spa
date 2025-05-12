@@ -10,24 +10,23 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex">
                     <SearchInput v-model="searchQuery" placeholder="Pesquisar" />
-
                     <FilterButton :isFiltersApplied="isFiltersApplied" @toggle-filter="showFilterModal = true" />
                 </div>
 
-                <CustomButton text="Novo Produto" :icon="'bi bi-plus'" customClass="btn-danger"
-                    :style="{ backgroundColor: '#DA1E28', color: 'white' }" @click="showDrawer = true" />
+                <CustomButton text="Novo Produto" icon="bi bi-plus" customClass="btn-danger"
+                    :style="{ backgroundColor: '#DA1E28', color: 'white' }" @click="openNewProductDrawer" />
             </div>
 
-            <ProductTable :filteredProducts="filteredProducts" @delete="deleteProduct" />
+            <ProductTable :filteredProducts="filteredProducts" @delete="deleteProduct" @edit-product="editProduct" />
 
-            <DrawerModal :showDrawer="showDrawer" :logo="logo" @update:showDrawer="showDrawer = $event"
-                @save-product="save" />
+            <DrawerModal :showDrawer="showDrawer" :logo="logo" :productBeingEdited="productBeingEdited"
+                @update:showDrawer="showDrawer = $event" @save-product="createProduct"
+                @update-product="updateProduct" />
 
             <FilterModal :show="showFilterModal" :filters="filters" @close="showFilterModal = false"
                 @apply="filters = $event" />
 
             <Toast :message="toastMessage" :type="toastType" />
-
         </div>
     </div>
 </template>
@@ -41,7 +40,6 @@ import ProductTable from './ProductTable.vue';
 import FilterModal from './FilterModal.vue';
 import FilterButton from './FilterButton.vue';
 import Toast from './Toast.vue';
-import DeleteConfirmationModal from './DeleteConfirmationModal.vue';
 import axios from 'axios';
 import logo from '@assets/logo.png';
 import avatar from '@assets/avatar.png';
@@ -55,8 +53,7 @@ export default {
         ProductTable,
         FilterModal,
         FilterButton,
-        Toast,
-        DeleteConfirmationModal
+        Toast
     },
     data() {
         return {
@@ -64,8 +61,8 @@ export default {
             showDrawer: false,
             showFilterModal: false,
             searchQuery: '',
-            logo: logo,
-            avatar: avatar,
+            logo,
+            avatar,
             filters: {
                 category: null,
                 minPrice: null,
@@ -73,8 +70,7 @@ export default {
             },
             toastMessage: '',
             toastType: 'success',
-            showDeleteConfirmation: false,
-            productToDelete: null
+            productBeingEdited: null
         };
     },
     computed: {
@@ -87,7 +83,6 @@ export default {
                 return matchesSearch && matchesCategory && matchesMin && matchesMax;
             });
         },
-
         isFiltersApplied() {
             return (
                 this.filters.category !== null ||
@@ -96,57 +91,84 @@ export default {
             );
         }
     },
-
     mounted() {
         this.fetchProducts();
     },
     methods: {
+        openNewProductDrawer() {
+            this.productBeingEdited = null;
+            this.showDrawer = true;
+        },
+
+        editProduct(id) {
+            // Open the drawer modal to edit the product
+            const product = this.products.find(p => p.id === id);
+            if (product) {
+                this.productBeingEdited = { ...product };
+                this.showDrawer = true;
+            }
+        },
+
         fetchProducts() {
-            axios
-                .get('/api/products')
-                .then((res) => {
+            axios.get('/api/products')
+                .then(res => {
                     this.products = res.data.sort((a, b) => b.id - a.id);
                 })
-                .catch((err) => {
-                    console.error('Error fetching products', err);
+                .catch(err => {
+                    console.error('Erro ao carregar produtos', err);
                     alert('Falha ao carregar produtos');
                 });
         },
 
-        save(productData) {
-            axios
-                .post('/api/products', productData)
+        createProduct(productData) {
+            axios.post('/api/products', productData)
                 .then(() => {
                     this.fetchProducts();
-                    this.showDrawer = false;
                     this.toastMessage = 'Produto salvo com sucesso!';
                     this.toastType = 'success';
                 })
-                .catch((error) => {
-                    console.error('Error saving product', error);
+                .catch(error => {
+                    console.error('Erro ao salvar produto', error);
                     this.toastMessage = 'Falha ao salvar o produto';
                     this.toastType = 'error';
+                })
+                .finally(() => {
+                    this.showDrawer = false;
                 });
         },
 
-        editProduct(id) {
-            console.log('Editando produto com ID:', id);
+        updateProduct(updatedProduct) {
+            axios.put(`/api/products/${updatedProduct.id}`, updatedProduct)
+                .then(() => {
+                    this.fetchProducts();
+                    this.toastMessage = 'Produto atualizado com sucesso!';
+                    this.toastType = 'success';
+                })
+                .catch(error => {
+                    console.error('Error updating product', error);
+                    this.toastMessage = 'Falha ao atualizar o produto';
+                    this.toastType = 'error';
+                })
+                .finally(() => {
+                    this.showDrawer = false;
+                    this.productBeingEdited = null;
+                });
         },
 
+
         deleteProduct(id) {
-            axios
-                .delete(`/api/products/${id}`)
+            axios.delete(`/api/products/${id}`)
                 .then(() => {
                     this.fetchProducts();
                     this.toastMessage = 'Produto deletado com sucesso!';
                     this.toastType = 'success';
                 })
-                .catch((error) => {
-                    console.log('Error deleting product', error);
+                .catch(error => {
+                    console.error('Error deleting product', error);
                     this.toastMessage = 'Falha ao deletar o produto';
                     this.toastType = 'error';
                 });
-        },
+        }
     }
 };
 </script>

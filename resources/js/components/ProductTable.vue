@@ -29,7 +29,7 @@
                     </td>
                     <td>
                         <i class="bi bi-pencil-square text-warning" style="cursor: pointer;"
-                            @click="$emit('edit', product.id)" title="Editar"></i>
+                            @click="$emit('edit-product', product.id)" title="Editar"></i>
                         <i class="bi bi-trash text-danger ms-2" style="cursor: pointer;"
                             @click="openDeleteModal(product.id)" title="Deletar"></i>
                     </td>
@@ -58,7 +58,6 @@ export default {
             this.$refs.deleteModal.openModal(productId);
         },
         handleConfirmDelete(productId) {
-            // Emite o evento de exclusão para o componente pai
             this.$emit('delete', productId);
         },
     },

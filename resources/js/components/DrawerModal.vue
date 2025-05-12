@@ -3,14 +3,13 @@
         <div class="drawer" v-if="showDrawer">
             <div class="drawer-header d-flex flex-column align-items-start">
                 <img :src="logo" alt="Logo" style="width: 40px; margin-bottom: 12px;" />
-                <h5 class="drawer-title">Cadastrar Produto</h5>
+                <h5 class="drawer-title">{{ productBeingEdited ? 'Editar Produto' : 'Cadastrar Produto' }}</h5>
             </div>
 
             <div class="drawer-body">
                 <form @submit.prevent="save">
                     <div class="mb-3">
                         <CustomInput v-model="name" :label="'Nome'" :id="'name'" :required="true" placeholder="Nome" />
-
                     </div>
 
                     <div class="mb-3">
@@ -25,7 +24,8 @@
 
                     <div class="d-flex justify-content-end gap-3">
                         <CustomButton text="Cancelar" customClass="cancel-btn" type="button" @click="closeDrawer" />
-                        <CustomButton text="Inserir Produto" customClass="btn-danger" type="submit" />
+                        <CustomButton :text="productBeingEdited ? 'Atualizar Produto' : 'Inserir Produto'"
+                            customClass="btn-danger" type="submit" />
                     </div>
                 </form>
             </div>
@@ -46,16 +46,25 @@ export default {
     },
     props: {
         showDrawer: Boolean,
-        logo: String
+        logo: String,
+        productBeingEdited: Object
     },
     watch: {
-        showDrawer(newVal) {
-            if (newVal) {
-                this.name = '';
-                this.price = '';
-                this.category = '';
-            }
-        }
+        productBeingEdited: {
+            immediate: true,
+            handler(newVal) {
+                // If productBeingEdited is not null, set the values of the form
+                if (newVal) {
+                    this.name = newVal.name || '';
+                    this.price = newVal.price || '';
+                    this.category = newVal.category || '';
+                } else {
+                    this.name = '';
+                    this.price = '';
+                    this.category = '';
+                }
+            },
+        },
     },
     data() {
         return {
@@ -66,15 +75,25 @@ export default {
     },
     methods: {
         save() {
-            this.$emit('save-product', {
+            const productData = {
                 name: this.name,
                 price: this.price,
                 category: this.category
-            });
+            };
+            if (this.productBeingEdited) {
+                // If productBeingEdited is not null, update the product
+                this.$emit('update-product', { ...productData, id: this.productBeingEdited.id });
+            } else {
+                // If productBeingEdited is null, create the product
+                this.$emit('save-product', productData);
+            }
             this.closeDrawer();
         },
         closeDrawer() {
             this.$emit('update:showDrawer', false);
+            this.name = '';
+            this.price = '';
+            this.category = '';
         }
     }
 };
