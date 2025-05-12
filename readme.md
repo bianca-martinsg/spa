@@ -58,6 +58,8 @@ php artisan key:generate
 ```
 
 ### 7. Create the database
+(Make sure your PHP and MySQL servers are running)
+
 You can create the database in two ways:
 
 - Option 1 — Manually via phpMyAdmin:
