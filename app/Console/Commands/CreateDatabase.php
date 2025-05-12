@@ -18,15 +18,29 @@ class CreateDatabase extends Command
     public function handle()
     {
         $dbName = env('DB_DATABASE');
+        $charset = config('database.connections.mysql.charset', 'utf8mb4');
+        $collation = config('database.connections.mysql.collation', 'utf8mb4_unicode_ci');
+
+        // Create a temporary connection to the database
+        config([
+            'database.connections.temp' => [
+                'driver' => 'mysql',
+                'host' => env('DB_HOST', '127.0.0.1'),
+                'port' => env('DB_PORT', '3306'),
+                'database' => null,
+                'username' => env('DB_USERNAME', 'root'),
+                'password' => env('DB_PASSWORD', ''),
+                'charset' => $charset,
+                'collation' => $collation,
+            ]
+        ]);
 
         try {
-            // Verify if the database exists
-            $result = DB::select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbName'");
+            $schemaName = collect(\DB::connection('temp')
+                ->select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?", [$dbName]))->first();
 
-            if (count($result) == 0) {
-                // If the database does not exist, create it
-                $this->info("Database '$dbName' not found. Creating the database...");
-                DB::statement("CREATE DATABASE $dbName");
+            if (!$schemaName) {
+                \DB::connection('temp')->statement("CREATE DATABASE `$dbName` CHARACTER SET $charset COLLATE $collation");
                 $this->info("Database '$dbName' created successfully!");
             } else {
                 $this->info("Database '$dbName' already exists.");
@@ -35,4 +49,7 @@ class CreateDatabase extends Command
             $this->error("Error creating database: " . $e->getMessage());
         }
     }
+
 }
+
+

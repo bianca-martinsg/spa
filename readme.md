@@ -10,16 +10,23 @@ This project is a **single-page application** built with Laravel 6.2 for the mai
 
 ## 🔧 Requirements
 
-Make sure the following tools are installed on your machine:
+Make sure the following tools or services are installed and properly configured on your machine:
 
-- [XAMPP 7.3.33](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.3.33/) (PHP 7.3, MySQL)
-- [Composer](https://getcomposer.org/)
-- [Node.js e NPM](https://nodejs.org/)
-- Git
+- **PHP 7.3.33**
+- **Apache Server**
+- **MySQL**
+- **Composer** ([Download](https://getcomposer.org/))
+- **Node.js and NPM** ([Download](https://nodejs.org/))
+- **Git**
+
+> 💡 You may use a local server stack like [XAMPP 7.3.33](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.3.33/) to simplify setup.  
+> However, it's optional — feel free to use any environment as long as Apache, MySQL, and PHP 7.3 are available and properly configured.
 
 ---
 
 ## ⚙️ Getting Started
+
+> **Note:** This guide is intended for Windows users using XAMPP. If you're on Linux or macOS, adjust the paths and commands accordingly.
 
 ### 1. Clone the repository
 
@@ -27,15 +34,13 @@ Make sure the following tools are installed on your machine:
 git clone https://github.com/bianca-martinsg/spa.git
 ```
 
-### 2. Move the project to your XAMPP htdocs directory
+### 📁 Optional: Using XAMPP (Recommended for Windows users)
+#### 2. Move the project to your XAMPP htdocs directory
 ```bash
-mv seu-repositorio /caminho/para/xampp/htdocs/
+/path/xampp/htdocs/
 ```
 
-### 3. Navigate to the project folder
-```bash
-cd /caminho/para/xampp/htdocs/seu-repositorio
-```
+#### 3. Navigate to the project folder
 
 ### 4. Install PHP dependencies
 ```bash
@@ -43,9 +48,7 @@ composer install
 ```
 
 ### 5. Copy the .env file
-```bash
-cp .env.example .env
-```
+Copy the .env.example file and rename it to .env.
 
 ### 6. Generate the application key
 ```bash
@@ -53,6 +56,8 @@ php artisan key:generate
 ```
 
 ### 7. Create the database
+(Make sure your PHP and MySQL servers are running)
+
 You can create the database in two ways:
 
 - Option 1 — Manually via phpMyAdmin:
@@ -102,4 +107,10 @@ npm run watch
 To clear the data from the products table without deleting the table structure, you can run the following command:
 ```bash
 php artisan clear:database
+```
+
+### View Edit and Delete Functions
+To view the edit and delete functionalities, access the branch:
+```bash
+git switch feature/add-edit-delete-actions
 ```
