@@ -47,4 +47,26 @@ export default {
 .custom-button {
     padding: 8px 12px;
 }
+
+@media (max-width: 768px) {
+    .custom-button {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-button i {
+        margin-right: 0;
+    }
+
+    .custom-button {
+        justify-content: center;
+    }
+
+    .custom-button span {
+        display: none;
+    }
+}
 </style>
