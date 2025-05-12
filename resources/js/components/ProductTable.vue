@@ -3,10 +3,22 @@
         <table class="table table-borderless align-middle">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Categoria</th>
-                    <th scope="col">Preço</th>
+                     <th scope="col">
+                        ID
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('id')"></i>
+                    </th>
+                    <th scope="col">
+                        Nome
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('name')"></i>
+                    </th>
+                    <th scope="col">
+                        Categoria
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('category')"></i>
+                    </th>
+                    <th scope="col">
+                        Preço
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('price')"></i>
+                    </th>
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
@@ -53,14 +65,47 @@ export default {
     props: {
         filteredProducts: Array,
     },
+    data() {
+        return {
+            sortKey: '', // Key to sort
+            sortOrder: 1 // 1 for ascending, -1 for descending
+        };
+    },
     methods: {
-        openDeleteModal(productId) {
+         openDeleteModal(productId) {
             this.$refs.deleteModal.openModal(productId);
         },
         handleConfirmDelete(productId) {
             this.$emit('delete', productId);
         },
-    },
+        sort(key) {
+            if (this.sortKey === key) { // If the sort key is the same as the key, change the sort order
+                this.sortOrder = this.sortOrder * -1;
+            } else {
+                this.sortKey = key;
+                this.sortOrder = 1; // 1 for ascending, -1 for descending
+            }
+            this.sortProducts();
+        },
+        sortProducts() {
+            const sortedProducts = [...this.filteredProducts];
+            sortedProducts.sort((a, b) => {
+                if (this.sortKey) {
+                    // If the sort key is not empty, sort the products
+                    if (this.sortKey === 'price') {
+                        return (parseFloat(a[this.sortKey]) - parseFloat(b[this.sortKey])) * this.sortOrder;
+                    } else if (typeof a[this.sortKey] === 'string') {
+                        return a[this.sortKey].localeCompare(b[this.sortKey]) * this.sortOrder;
+                    } else {
+                        return (a[this.sortKey] - b[this.sortKey]) * this.sortOrder;
+                    }
+                }
+                return 0;
+            });
+
+            this.filteredProducts = sortedProducts; // Update the array of products reactively
+        }
+    }
 };
 </script>
 
