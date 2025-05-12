@@ -21,19 +21,18 @@ class ProductController extends Controller
         $this->repo = $repo;
     }
 
-    // Método para listar os produtos
+    // List all products
     public function index()
     {
         return response()->json($this->repo->all());
     }
 
-    // Método para criar um novo produto
-    public function store(StoreProductRequest $request) 
+    // Create a new product
+    public function store(StoreProductRequest $request)
     {
-        // Validar os dados com o StoreProductRequest (feito automaticamente)
+        // Validate the data with the StoreProductRequest (done automatically)
         $product = $this->repo->create($request->validated());
-        
-        // Retornar o produto recém-criado
+
         return response()->json($product, 201); // Código 201 indica criação bem-sucedida
     }
 }

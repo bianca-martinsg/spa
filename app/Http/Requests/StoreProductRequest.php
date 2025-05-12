@@ -13,8 +13,8 @@ class StoreProductRequest extends FormRequest
      */
 
 
-    # Método para verificar se o usuário está autorizado a fazer essa requisição
-    # Neste caso, todos os usuários estão autorizados
+    # Method to check if the user is authorized to make this request
+    # In this case, all users are authorized
     public function authorize()
     {
         return true;
