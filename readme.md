@@ -1,16 +1,16 @@
 # 📦 SPA de Cadastro e Listagem de Produtos (Laravel 6.2)
 
-Este projeto é uma aplicação **single-page** desenvolvida com Laravel 6.2 para fluxo principal de **cadastro e listagem de produtos**, contendo as seguintes funcionalidades:
+This project is a **single-page application** built with Laravel 6.2 for the main flow of **product registration and listing**, featuring:
 
-- Cadastro de produtos com **nome**, **categoria** e **preço**;
-- Exibição em listagem dinâmica;
-- Interface responsiva.
+- Product registration with **name**, **category**, and **price**;
+- Dynamic listing display;
+- Responsive user interface.
 
 ---
 
-## 🔧 Requisitos
+## 🔧 Requirements
 
-Antes de iniciar o projeto, verifique se as seguintes ferramentas estão instaladas:
+Make sure the following tools are installed on your machine:
 
 - [XAMPP 7.3.33](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.3.33/) (PHP 7.3, MySQL)
 - [Composer](https://getcomposer.org/)
@@ -19,73 +19,74 @@ Antes de iniciar o projeto, verifique se as seguintes ferramentas estão instala
 
 ---
 
-## ⚙️ Passo a passo para rodar o projeto
+## ⚙️ Getting Started
 
-### 1. Clonar o repositório
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/bianca-martinsg/spa.git
 ```
 
-### 2. Mover o projeto para o diretório do XAMPP
+### 2. Move the project to your XAMPP htdocs directory
 ```bash
 mv seu-repositorio /caminho/para/xampp/htdocs/
 ```
 
-### 3. Acesse a pasta do projeto
+### 3. Navigate to the project folder
 ```bash
 cd /caminho/para/xampp/htdocs/seu-repositorio
 ```
 
-### 4. Instale as dependências PHP
+### 4. Install PHP dependencies
 ```bash
 composer install
 ```
 
-### 5. Copie o arquivo .env
+### 5. Copy the .env file
 ```bash
 cp .env.example .env
 ```
 
-### 6. Gere a chave da aplicação
+### 6. Generate the application key
 ```bash
 php artisan key:generate
 ```
 
-### 7. Criar o banco de dados
-Você pode criar o banco de dados de duas formas:
+### 7. Create the database
+You can create the database in two ways:
 
-- Opção 1 — Manual via phpMyAdmin:
-    Acesse: http://localhost/phpmyadmin
+- Option 1 — Manually via phpMyAdmin:
+    Go to http://localhost/phpmyadmin and create a new database with the name defined in your .env (e.g., spa)
     Crie um banco com o nome definido no .env (ex: spa)
 
-- Opção 2 — Automática com comando Artisan:
-    Após configurar o .env, rode o seguinte comando:
+- Option 2 — Automatically with an Artisan command:
+After setting up your .env file, run:
 ```bash
 php artisan db:create
 ```
 
-### 8. Verifique o .env
+### 8. Configure the .env file
 ```bash
 DB_DATABASE=spa
 DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-### 9. Execute as migrações
+### 9. Run the migrations
 ```bash
 php artisan migrate
 ```
 
-### 10. Execute os seeders
+### 10. Run the seeders
 ```bash
 php artisan db:seed
 ```
 
-### 11. Execute o servidor Laravel
+### 11. Start the Laravel development server
 ```bash
 php artisan serve
 ```
+Visit the app at: http://localhost:8000
 
 ### 12. Compile os assets do front-end
 ```bash
