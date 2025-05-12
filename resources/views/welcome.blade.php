@@ -7,6 +7,7 @@
   <title>Produtos</title>
   <link href="{{ mix('css/app.css') }}" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="{{ asset('assets/logo.png') }}" rel="icon">
 </head>
 
 <body>
