@@ -1,4 +1,4 @@
-# Product Registration and Listing SPA (Laravel 6.2)
+# Product Registration and Listing SPA
 
 This project is a **single-page application** built with Laravel 6.2 for the main flow of **product registration and listing**, featuring:
 
