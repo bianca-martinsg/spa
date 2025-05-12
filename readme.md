@@ -1,4 +1,4 @@
-# 📦 Product Registration and Listing SPA (Laravel 6.2)
+# Product Registration and Listing SPA
 
 This project is a **single-page application** built with Laravel 6.2 for the main flow of **product registration and listing**, featuring:
 
@@ -8,7 +8,7 @@ This project is a **single-page application** built with Laravel 6.2 for the mai
 
 ---
 
-## 🔧 Requirements
+## Requirements
 
 Make sure the following tools or services are installed and properly configured on your machine:
 
@@ -24,7 +24,7 @@ Make sure the following tools or services are installed and properly configured 
 
 ---
 
-## ⚙️ Getting Started
+## Getting Started
 
 > **Note:** This guide is intended for Windows users using XAMPP. If you're on Linux or macOS, adjust the paths and commands accordingly.
 
@@ -34,7 +34,7 @@ Make sure the following tools or services are installed and properly configured 
 git clone https://github.com/bianca-martinsg/spa.git
 ```
 
-### 📁 Optional: Using XAMPP (Recommended for Windows users)
+### Optional: Using XAMPP (Recommended for Windows users)
 #### 2. Move the project to your XAMPP htdocs directory
 ```bash
 /path/xampp/htdocs/
