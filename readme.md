@@ -48,9 +48,7 @@ composer install
 ```
 
 ### 5. Copy the .env file
-```bash
-cp .env.example .env
-```
+Copy the .env.example file and rename it to .env.
 
 ### 6. Generate the application key
 ```bash
@@ -109,4 +107,10 @@ npm run watch
 To clear the data from the products table without deleting the table structure, you can run the following command:
 ```bash
 php artisan clear:database
+```
+
+### View Edit and Delete Functions
+To view the edit and delete functionalities, access the branch:
+```bash
+git checkout feature/add-edit-delete-actions
 ```
