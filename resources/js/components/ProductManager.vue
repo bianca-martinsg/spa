@@ -18,13 +18,15 @@
                     :style="{ backgroundColor: '#DA1E28', color: 'white' }" @click="showDrawer = true" />
             </div>
 
-            <ProductTable :filteredProducts="filteredProducts" @edit="editProduct" @delete="deleteProduct" />
+            <ProductTable :filteredProducts="filteredProducts" />
 
             <DrawerModal :showDrawer="showDrawer" :logo="logo" @update:showDrawer="showDrawer = $event"
                 @save-product="save" />
 
             <FilterModal :show="showFilterModal" :filters="filters" @close="showFilterModal = false"
                 @apply="filters = $event" />
+
+            <Toast :message="toastMessage" :type="toastType" />
 
         </div>
     </div>
@@ -38,6 +40,7 @@ import DrawerModal from './DrawerModal.vue';
 import ProductTable from './ProductTable.vue';
 import FilterModal from './FilterModal.vue';
 import FilterButton from './FilterButton.vue';
+import Toast from './Toast.vue';
 import axios from 'axios';
 import logo from '@assets/logo.png';
 import avatar from '@assets/avatar.png';
@@ -50,7 +53,8 @@ export default {
         DrawerModal,
         ProductTable,
         FilterModal,
-        FilterButton
+        FilterButton,
+        Toast
     },
     data() {
         return {
@@ -64,7 +68,9 @@ export default {
                 category: null,
                 minPrice: null,
                 maxPrice: null
-            }
+            },
+            toastMessage: '',
+            toastType: 'success'
         };
     },
     computed: {
@@ -109,10 +115,13 @@ export default {
                 .then(() => {
                     this.fetchProducts();
                     this.showDrawer = false;
+                    this.toastMessage = 'Produto salvo com sucesso!';
+                    this.toastType = 'success';
                 })
                 .catch((error) => {
                     console.log('Error saving product', error);
-                    alert('Falha ao salvar o produto');
+                    this.toastMessage = 'Falha ao salvar o produto';
+                    this.toastType = 'error';
                 });
         }
     }
