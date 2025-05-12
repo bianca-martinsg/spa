@@ -1,54 +1,92 @@
 <template>
-    <table class="table table-borderless align-middle">
-        <thead>
-            <tr>
-                <th scope="col">ID <i class="bi bi-arrow-down-up ms-1"></i></th>
-                <th scope="col">Nome <i class="bi bi-arrow-down-up ms-1"></i></th>
-                <th scope="col">Categoria <i class="bi bi-arrow-down-up ms-1"></i></th>
-                <th scope="col">Preço <i class="bi bi-arrow-down-up ms-1"></i></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(product, index) in filteredProducts" :key="product.id">
-                <td># {{ product.id }}</td>
-                <td class="text-truncate" style="max-width: 200px;">{{ product.name }}</td>
-                <td>
-                    <span class="badge" :class="badgeClass(product.category || 'Outros')">
-                        {{ product.category || 'Outros' }}
-                    </span>
-                </td>
-                <td>
-                    R$ {{
-                        parseFloat(product.price).toLocaleString('pt-BR', {
-                            minimumFractionDigits: 2
-                        })
-                    }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-scroll">
+        <table class="table table-borderless align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        ID
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('id')"></i>
+                    </th>
+                    <th scope="col">
+                        Nome
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('name')"></i>
+                    </th>
+                    <th scope="col">
+                        Categoria
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('category')"></i>
+                    </th>
+                    <th scope="col">
+                        Preço
+                        <i class="bi bi-arrow-down-up ms-1" @click="sort('price')"></i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-if="filteredProducts.length === 0">
+                    <td colspan="4" class="text-center">Nenhum produto encontrado</td>
+                </tr>
+                <tr v-for="(product) in filteredProducts" :key="product.id">
+                    <td># {{ product.id }}</td>
+                    <td class="text-truncate" style="max-width: 200px;">{{ product.name }}</td>
+                    <td>
+                        <Badge :category="product.category" />
+                    </td>
+                    <td>
+                        R$ {{
+                            parseFloat(product.price).toLocaleString('pt-BR', {
+                                minimumFractionDigits: 2
+                            })
+                        }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <script>
+import Badge from './Badge.vue';
+
 export default {
+    components: {
+        Badge
+    },
     props: {
         filteredProducts: Array
     },
+    data() {
+        return {
+            sortKey: '', // Key to sort
+            sortOrder: 1 // 1 for ascending, -1 for descending
+        };
+    },
     methods: {
-        badgeClass(category) {
-            switch (category) {
-                case 'Informática':
-                    return 'badge-informatica';
-                case 'TV/Áudio':
-                    return 'badge-tv-audio';
-                case 'Eletrodomésticos':
-                    return 'badge-eletrodomesticos';
-                case 'Peças e Acessórios':
-                    return 'badge-pecas-acessorios';
-                case 'Outros':
-                default:
-                    return 'badge-outros';
+        sort(key) {
+            if (this.sortKey === key) { // If the sort key is the same as the key, change the sort order
+                this.sortOrder = this.sortOrder * -1;
+            } else {
+                this.sortKey = key;
+                this.sortOrder = 1; // 1 for ascending, -1 for descending
             }
+            this.sortProducts();
+        },
+        sortProducts() {
+            const sortedProducts = [...this.filteredProducts];
+            sortedProducts.sort((a, b) => {
+                if (this.sortKey) {
+                    // If the sort key is not empty, sort the products
+                    if (this.sortKey === 'price') {
+                        return (parseFloat(a[this.sortKey]) - parseFloat(b[this.sortKey])) * this.sortOrder;
+                    } else if (typeof a[this.sortKey] === 'string') {
+                        return a[this.sortKey].localeCompare(b[this.sortKey]) * this.sortOrder;
+                    } else {
+                        return (a[this.sortKey] - b[this.sortKey]) * this.sortOrder;
+                    }
+                }
+                return 0;
+            });
+
+            this.filteredProducts = sortedProducts; // Update the array of products reactively
         }
     }
 };
@@ -69,38 +107,28 @@ export default {
     line-height: 20px;
 }
 
-.badge-informatica {
-    background-color: #FEE685;
-    color: #A16207;
-    padding: 6px 8px;
-    border-radius: 4px;
+.table-scroll {
+    max-height: 600px;
+    overflow-y: auto;
 }
 
-.badge-tv-audio {
-    background-color: #CEEDF3;
-    color: #4094B7;
-    padding: 6px 8px;
-    border-radius: 4px;
+i {
+    cursor: pointer;
 }
 
-.badge-eletrodomesticos {
-    background-color: #DDD6FF;
-    color: #8E51FF;
-    padding: 6px 8px;
-    border-radius: 4px;
-}
+@media (max-width: 768px) {
+    .table-scroll {
+        overflow-x: auto;
+    }
 
-.badge-pecas-acessorios {
-    background-color: #FFD6A7;
-    color: #CA3500;
-    padding: 6px 8px;
-    border-radius: 4px;
-}
+    .table {
+        min-width: 600px;
+    }
 
-.badge-outros {
-    background-color: #6c757d;
-    color: white;
-    padding: 6px 8px;
-    border-radius: 4px;
+    .table th,
+    .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
 }
 </style>
