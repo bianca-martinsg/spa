@@ -15,24 +15,39 @@ class CreateDatabase extends Command
         parent::__construct();
     }
 
-    public function handle()
-    {
-        $dbName = env('DB_DATABASE');
+   public function handle()
+{
+    $dbName = env('DB_DATABASE');
+    $charset = config('database.connections.mysql.charset', 'utf8mb4');
+    $collation = config('database.connections.mysql.collation', 'utf8mb4_unicode_ci');
 
-        try {
-            // Verify if the database exists
-            $result = DB::select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbName'");
+    // Cria uma conexão temporária sem banco de dados
+    config(['database.connections.temp' => [
+        'driver' => 'mysql',
+        'host' => env('DB_HOST', '127.0.0.1'),
+        'port' => env('DB_PORT', '3306'),
+        'database' => null, // Sem banco de dados
+        'username' => env('DB_USERNAME', 'root'),
+        'password' => env('DB_PASSWORD', ''),
+        'charset' => $charset,
+        'collation' => $collation,
+    ]]);
 
-            if (count($result) == 0) {
-                // If the database does not exist, create it
-                $this->info("Database '$dbName' not found. Creating the database...");
-                DB::statement("CREATE DATABASE $dbName");
-                $this->info("Database '$dbName' created successfully!");
-            } else {
-                $this->info("Database '$dbName' already exists.");
-            }
-        } catch (\Exception $e) {
-            $this->error("Error creating database: " . $e->getMessage());
+    try {
+        $schemaName = collect(\DB::connection('temp')
+            ->select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?", [$dbName]))->first();
+
+        if (!$schemaName) {
+            \DB::connection('temp')->statement("CREATE DATABASE `$dbName` CHARACTER SET $charset COLLATE $collation");
+            $this->info("Database '$dbName' created successfully!");
+        } else {
+            $this->info("Database '$dbName' already exists.");
         }
+    } catch (\Exception $e) {
+        $this->error("Error creating database: " . $e->getMessage());
     }
 }
+
+}
+
+
