@@ -115,8 +115,9 @@ export default {
                     this.products = res.data.sort((a, b) => b.id - a.id);
                 })
                 .catch(err => {
-                    console.error('Erro ao carregar produtos', err);
-                    alert('Falha ao carregar produtos');
+                    console.error('Error loading products', err);
+                    this.toastMessage = 'Falha ao carregar produtos';
+                    this.toastType = 'error';
                 });
         },
 
@@ -128,7 +129,7 @@ export default {
                     this.toastType = 'success';
                 })
                 .catch(error => {
-                    console.error('Erro ao salvar produto', error);
+                    console.error('Error saving product', error);
                     this.toastMessage = 'Falha ao salvar o produto';
                     this.toastType = 'error';
                 })
